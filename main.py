@@ -3,7 +3,7 @@ from getWeb import getWebContent
 from getHref import getFirstHref, getNextHref
 from LibLink import getLibLink, easyGetLibLink
 
-repo_url = "https://repo1.maven.org/maven2/cn/"
+repo_url = "https://repo1.maven.org/maven2/cl/"
 
 group1_list = getFirstHref(getWebContent(repo_url))
 print(group1_list)

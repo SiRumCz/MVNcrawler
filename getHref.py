@@ -42,5 +42,5 @@ def getNextHref(repo_url, gp, g_list):
                 gp1.append(c_list)
         else:
             g_list.append(i)
-
+    # print(gp1)
     return gp1, g_list
