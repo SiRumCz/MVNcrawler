@@ -23,7 +23,7 @@ def getVersionDetail(content):
     :return:
     '''
     obj = re.compile(
-        r'<tr><td>.*?href=\"(?P<href>.*?)\" class=\"vbtn release\">(?P<version>.*?)</a>.*?>Central<.*?<td.*?>.*?(?P<usages>[0-9]+?)[<\n].*?</td>',
+        r'<tr><td>.*?href=\"(?P<href>.*?)\" class=\"vbtn release\">(?P<version>.*?)</a>.*?>Central<.*?<td.*?>.*?(?P<usages>[0-9]+?)[<\n].*?</span></td><td>(?P<date>.*?)</td>',
         re.S)
 
     result = obj.findall(content)
