@@ -89,15 +89,18 @@ def getRunDep(content):
     return runDep
 
 
-mvn_url = "https://mvnrepository.com/artifact"
+def getDependencies(groupId, artifactId):
+    mvn_url = "https://mvnrepository.com/artifact"
+    url = mvn_url + "/" + groupId + "/" + artifactId + "/"
+    versionList = getVersionDetail(getWebContent(url))
+    print(versionList)
+    for i in versionList:
+        print(i[0])
+        print(getComDep(getWebContent(url + i[1])))
+        print(getRunDep(getWebContent(url + i[1])))
+        print(getTestDep(getWebContent(url + i[1])))
+
+
 groupId = "edu.uci.ics"
 artifactId = "crawler4j"
-versionList = []
-url = mvn_url + "/" + groupId + "/" + artifactId + "/"
-versionList = getVersionDetail(getWebContent(url))
-print(versionList)
-for i in versionList:
-    print(i[0])
-    print(getComDep(getWebContent(url + i[1])))
-    print(getRunDep(getWebContent(url + i[1])))
-    print(getTestDep(getWebContent(url + i[1])))
+getDependencies(groupId, artifactId)
