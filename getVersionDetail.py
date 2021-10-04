@@ -89,6 +89,20 @@ def getRunDep(content):
     return runDep
 
 
+def getManDep(content):
+    obj1 = re.compile(r'<h2>Managed Dependencies(?P<main>.*?)</table>', re.S)
+    if len(obj1.findall(content)) == 0:
+        return []
+    main_content = obj1.findall(content)[0]
+    obj = re.compile(
+        r'<tr>.*?</td>.*?</td><td>.*?>(?P<groupId>.*?)</a>[<\n]»\n.*?>(?P<artifactId>.*?)</a></td>.*?<a.*?>\n(?P<version>.*?)</a>.*?</tr>',
+        re.S)
+
+    manDep = obj.findall(main_content)
+
+    return manDep
+
+
 def getDependencies(groupId, artifactId):
     mvn_url = "https://mvnrepository.com/artifact"
     url = mvn_url + "/" + groupId + "/" + artifactId + "/"
@@ -97,6 +111,7 @@ def getDependencies(groupId, artifactId):
     for i in versionList:
         print(i[0])
         print(getComDep(getWebContent(url + i[1])))
+        print(getManDep(getWebContent(url + i[1])))
         print(getRunDep(getWebContent(url + i[1])))
         print(getTestDep(getWebContent(url + i[1])))
 
