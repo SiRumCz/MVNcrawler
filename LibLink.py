@@ -1,30 +1,80 @@
+import csv
 import re
+import time
 
 import requests
 
-from utils import strChange
+from utils import strChange, duplicateDrop
 
 
-def easyGetLibLink(g_list):
+def divideGroupArtifact(file, tofile):
     '''
     after getting all the href from "https://repo1.maven.org/maven2/", remove the version href in last level
     :param g_list:
     :return:
     '''
-    libLink = []
-    for i in g_list:
-        obj = re.compile(
-            r'(?P<gId>.*)/(?P<aId>.*?)/.*?/',
-            re.S)
-        result = obj.finditer(i[0])
-        for it in result:
-            gId = it.group('gId')
-            aId = it.group('aId')
-            link = gId + "/" + aId
-            libLink.append(link)
-    libLink = list(set(libLink))
-    return libLink
+    # lst = ['1']
+    with open(file)as f:
+        g1_csv = csv.reader(f)
+        for j in g1_csv:
+            obj = re.compile(
+                r'(?P<gId>.*)/(?P<aId>.*?)/',
+                re.S)
+            # print(j[0])
+            result = obj.findall(j[0])
+            # print(result[0])
+            # result[0] = strChange(result[0], "/", ".")
+            # lst.append(result)
+            # for i in range(len(group1_list)):
+            with open(tofile, 'a', newline='')as f:
+                f_csv = csv.writer(f)
+                # ls[0] = group1_list[i]
+                # print(ls[0])
+                f_csv.writerow(result[0])
+    #         if len(lst) >= 1000:
+    #             print(lst)
+    #             # print(time.strftime('  %Y-%m-%d %H:%M:%S', time.localtime(time.time())))
+    #             with open(tofile, 'a', newline='')as f:
+    #                 f_csv = csv.writer(f)
+    #                 f_csv.writerows(lst)
+    #             lst = []
+    # with open(tofile, 'a', newline='')as f:
+    #     f_csv = csv.writer(f)
+    #     f_csv.writerows(lst)
+    duplicateDrop(tofile)
 
+
+# divideGroupArtifact("data/result1.csv", "data/result.csv")
+
+
+def removeVersion(file, tofile):
+    '''
+    after getting all the href from "https://repo1.maven.org/maven2/", remove the version href in last level
+    :param g_list:
+    :return:
+    '''
+    lst = []
+    with open(file)as f:
+        g1_csv = csv.reader(f)
+        for j in g1_csv:
+            obj = re.compile(
+                r'(?P<gId>.*/).*?/',
+                re.S)
+            result = obj.findall(j[0])
+            # result[0] = strChange(result[0], "/", ".")
+            lst.append(result)
+            if len(lst) >= 1000:
+                with open(tofile, 'a', newline='')as f:
+                    f_csv = csv.writer(f)
+                    f_csv.writerows(lst)
+                lst = []
+    with open(tofile, 'a', newline='')as f:
+        f_csv = csv.writer(f)
+        f_csv.writerows(lst)
+    duplicateDrop(tofile)
+
+
+# removeVersion("data/versionlib.csv","data/versionlib2.csv")
 
 def getLibLink(g_list):
     '''
@@ -57,7 +107,6 @@ def getLibLink(g_list):
         libLink1.append(link)
     libLink = list(set(libLink1))
     return libLink
-
 
 # xy = [['cl/daplay/jfun/1.0.0/', 'daplay.jfun.1.0.0'], ['cl/daplay/jrut/1.0.0/', 'daplay.jrut.1.0.0'],
 #       ['cl/daplay/jrut/1.0.1/', 'daplay.jrut.1.0.1'], ['cl/daplay/jsurbtc/1.0.0/', 'daplay.jsurbtc.1.0.0']]

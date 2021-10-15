@@ -1,6 +1,9 @@
+import csv
 import re
+import time
 
 from getWeb import getWebContent
+from utils import strChange
 
 
 def getLastVersionDetail(content):
@@ -25,7 +28,11 @@ def getVersionDetail(content):
     :return:
     '''
     obj = re.compile(
-        r'<tr><td>.*?href=\"(?P<href>.*?)\" class=\"vbtn release\">(?P<version>.*?)</a>.*?>Central<.*?<td.*?>.*?(?P<usages>[0-9]+?)[<\n].*?</span></td><td>(?P<date>.*?)</td>',
+        r'<tbody>(.*)</tbody>',
+        re.S)
+    content = obj.findall(content)[0]
+    obj = re.compile(
+        r'<tr><td.*?>.*?href=\"(?P<href>.*?)\" class=\"vbtn release.*?\">(?P<version>.*?)</a>.*?>Central<.*?<td.*?>.*?(?P<usages>[0-9]+?)[<\n].*?</span></td><td>(?P<date>.*?)</td>',
         re.S)
 
     result = obj.findall(content)
@@ -107,15 +114,35 @@ def getDependencies(groupId, artifactId):
     mvn_url = "https://mvnrepository.com/artifact"
     url = mvn_url + "/" + groupId + "/" + artifactId + "/"
     versionList = getVersionDetail(getWebContent(url))
-    print(versionList)
+    # print(versionList)
     for i in versionList:
         print(i[0])
+        time.sleep(1)
         print(getComDep(getWebContent(url + i[1])))
         print(getManDep(getWebContent(url + i[1])))
         print(getRunDep(getWebContent(url + i[1])))
         print(getTestDep(getWebContent(url + i[1])))
 
 
-groupId = "edu.uci.ics"
-artifactId = "crawler4j"
-getDependencies(groupId, artifactId)
+# groupId = "edu.uci.ics"
+# artifactId = "crawler4j"
+# getDependencies(groupId, artifactId)
+def checkUrl(file):
+    with open(file)as f:
+        g1_csv = csv.reader(f)
+        for j in g1_csv:
+            time.sleep(1)
+            if getWebContent("https://mvnrepository.com/artifact/" + strChange(j[0], "/", ".") + "/" + j[1]) == "EMPTY":
+                print("error:", end='')
+                print(j)
+                # with open("data/wrongGA.csv", 'a', newline='')as f:
+                #     f_csv = csv.writer(f)
+                #     # ls[0] = group1_list[i]
+                #     # print(ls[0])
+                #     f_csv.writerow(j)
+            else:
+                getDependencies(strChange(j[0], "/", "."), j[1])
+
+
+checkUrl("data/result.csv")
+# print(getVersionDetail(getWebContent("https://mvnrepository.com/artifact/acegisecurity/acegi-security")))
