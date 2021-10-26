@@ -13,34 +13,16 @@ def divideGroupArtifact(file, tofile):
     :param g_list:
     :return:
     '''
-    # lst = ['1']
     with open(file)as f:
         g1_csv = csv.reader(f)
         for j in g1_csv:
             obj = re.compile(
                 r'(?P<gId>.*)/(?P<aId>.*?)/',
                 re.S)
-            # print(j[0])
             result = obj.findall(j[0])
-            # print(result[0])
-            # result[0] = strChange(result[0], "/", ".")
-            # lst.append(result)
-            # for i in range(len(group1_list)):
             with open(tofile, 'a', newline='')as f:
                 f_csv = csv.writer(f)
-                # ls[0] = group1_list[i]
-                # print(ls[0])
                 f_csv.writerow(result[0])
-    #         if len(lst) >= 1000:
-    #             print(lst)
-    #             # print(time.strftime('  %Y-%m-%d %H:%M:%S', time.localtime(time.time())))
-    #             with open(tofile, 'a', newline='')as f:
-    #                 f_csv = csv.writer(f)
-    #                 f_csv.writerows(lst)
-    #             lst = []
-    # with open(tofile, 'a', newline='')as f:
-    #     f_csv = csv.writer(f)
-    #     f_csv.writerows(lst)
     duplicateDrop(tofile)
 
 

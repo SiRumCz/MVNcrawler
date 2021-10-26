@@ -2,6 +2,8 @@ import csv
 import glob
 import random
 import os
+import re
+
 import pandas as pd
 import time
 
@@ -131,6 +133,39 @@ def keepNrows(file, n):
     data.to_csv(file, index=False, header=False)
 
 
+# 从n行开始读取csv
+def readCsvFromNrow(file, n):
+    with open(file)as f:
+        data = csv.reader(f)
+        # print(type(data))
+        for line, i in enumerate(data):
+            if line < n:
+                continue
+            else:
+                print(i)
+        #
+
+
+def mergeCsv(file, tofile):
+    '''
+    after getting all the href from "https://repo1.maven.org/maven2/", remove the version href in last level
+    :param g_list:
+    :return:
+    '''
+    k = []
+    with open(file)as f:
+        g1_csv = csv.reader(f)
+        for j in g1_csv:
+            with open(tofile, 'a', newline='')as f:
+                k.append(j[0] + "/" + j[1] + "/")
+                f_csv = csv.writer(f)
+                f_csv.writerow(k)
+                k = []
+    # duplicateDrop(tofile)
+
+
+# mergeCsv("data/wrongGA.csv", "data/error/wrongGA.csv")
+# readCsvFromNrow("data/11.csv",5)
 # duplicateDrop("data/3.csv")
 #
 # keepNrows("data/3-3.csv",39)

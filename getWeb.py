@@ -24,9 +24,16 @@ def getWebContent(url):
         response.close()
 
         return content
-    except urllib.error.HTTPError:
+    except urllib.error.HTTPError as err:
         print(url + "   is a wrong url")
-        return "EMPTY"
+        code = err.code
+        if code == 403:
+            return "403 FORBIDDEN"
+        else:
+            # print(code)
+            return "EMPTY"
 
 
-# getWebContent("https://repo1.maven.org/maven2/co/privacyone/cerberus/")
+# print(getWebContent("https://mvnrepository.com/artifact/be.yildiz-games/common-client/1.0.1"))
+# str=getWebContent("https://zhuanlan.zhihu.com/p/123")
+# print(str)
