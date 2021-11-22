@@ -9,6 +9,7 @@ import time
 
 user_agent_list = [
     # Chrome
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36",
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36',
     'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
     'Mozilla/5.0 (Windows NT 5.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
@@ -65,21 +66,22 @@ def mkSubFile(lines, srcName, sub):
         fout.close()
 
 
-# def splitByLineCount(filename, count):
-#     fin = open(filename, encoding="utf-8")
-#     try:
-#         buf = []
-#         sub = 1
-#         for line in fin:
-#             buf.append(line)
-#             if len(buf) == count:
-#                 sub = mkSubFile(buf, filename, sub)
-#                 buf = []
-#         if len(buf) != 0:
-#             sub = mkSubFile(buf, filename, sub)
-#     finally:
-#         fin.close()
+def splitByLineCount(filename, count):
+    fin = open(filename, encoding="utf-8")
+    try:
+        buf = []
+        sub = 1
+        for line in fin:
+            buf.append(line)
+            if len(buf) == count:
+                sub = mkSubFile(buf, filename, sub)
+                buf = []
+        if len(buf) != 0:
+            sub = mkSubFile(buf, filename, sub)
+    finally:
+        fin.close()
 
+# splitByLineCount("data/result/result_1.csv",50000)
 
 # 合并csv
 def mergeCsv(paraFile, resultName):
@@ -164,6 +166,15 @@ def mergeCsv(file, tofile):
     # duplicateDrop(tofile)
 
 
+def get_FileSize(filePath):
+    fp = open(filePath, "a")
+    fsize = os.path.getsize(filePath)
+    fsize = fsize / float(1000000)
+    fp.close()
+    return round(fsize, 2)
+
+# get_FileSize("data/dependencies/dependencies1.csv")
+
 # mergeCsv("data/wrongGA.csv", "data/error/wrongGA.csv")
 # readCsvFromNrow("data/11.csv",5)
 # duplicateDrop("data/3.csv")
@@ -193,7 +204,7 @@ def mergeCsv(file, tofile):
 # print(len(pd.read_csv("data/5.csv").index))
 # print(pd.read_csv("data/5.csv"))
 
-# csv_list = glob.glob("data/*group.csv")  # 查看同文件夹下的csv文件数
+# csv_list = glob.glob("data/*.csv")  # 查看同文件夹下的csv文件数
 # print(u'共发现%s个CSV文件' % len(csv_list))
 # print(u'正在处理............')
 # for i in csv_list:  # 循环读取同文件夹下的csv文件

@@ -1,9 +1,10 @@
 import csv
+import datetime
 import re
 import time
 
 from getWeb import getWebContent
-from utils import strChange
+from utils import strChange, get_FileSize
 
 
 def getLastVersionDetail(content):
@@ -30,6 +31,7 @@ def getVersionDetail(groupId, artifactId):
     res = []
     mvn_url = "https://mvnrepository.com/artifact"
     url = mvn_url + "/" + groupId + "/" + artifactId + "/"
+    # print(url)
     content = getWebContent(url)
     # obj = re.compile(
     #     r'Used By<.*?<b>(.*?)artifacts',
@@ -40,11 +42,12 @@ def getVersionDetail(groupId, artifactId):
         r'<tbody>(.*)</tbody>',
         re.S)
     content = obj.findall(content)[0]
+    # print(content)
     obj = re.compile(
-        r'<tr><td.*?>.*?href=\"(?P<artifact>.*?)/(?P<version>.*?)\" class=\"vbtn.*?\">.*?</a>.*?>Central<.*?<td.*?>.*?(?P<usages>[0-9]+?)[<\n].*?</span></td><td>(?P<date>.*?)</td>',
+        r'<tr><td.*?>.*?href=\"(?P<artifact>.*?)/(?P<version>.*?)\" class=\"vbtn.*?\">.*?</a>.*?<td.*?>.*?(?P<usages>[0-9]+?)[<\n].*?</span></td><td>(?P<date>.*?)</td>',
         re.S)
-
     result = obj.findall(content)
+    # print(result)
     for i in result:
         # print(i)
         i = list(i)
@@ -129,33 +132,39 @@ def getDependencies(groupId, artifactId):
     mvn_url = "https://mvnrepository.com/artifact"
     group_url = mvn_url + "/" + groupId + "/"
     # url = mvn_url + "/" + groupId + "/" + artifactId + "/"
+    # print("3333333 " + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
+    # print(group_url)
     versionList = getVersionDetail(groupId, artifactId)
     # print(versionList)
     for i in versionList:
         # print(i[2])
-        time.sleep(1.1)
+        # time.sleep(1.1)
+        # print("44444444 " + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
         obj = re.compile(
             r'<th>Date</th><td>\((.*?)\) </td>',
             re.S)
         # print(group_url + i[1] + i[2])
         flag = 1
+        webResult = getWebContent(group_url + i[1] + "/" + i[2])
+        # print(i)
         while flag:
-            if getWebContent(group_url + i[1] + "/" + i[2]) == "403 FORBIDDEN":
-                # print(i[1] + "/" + i[2]+"403")
-                time.sleep(60)
+            if webResult == "403 FORBIDDEN":
+                time.sleep(600)
+                webResult = getWebContent(group_url + i[1] + "/" + i[2])
             else:
-                break
-        if getWebContent(group_url + i[1] + "/" + i[2]) == "EMPTY":
-            with open("data/wrongVersion.csv", 'a', newline='')as fw:
+                flag = 0
+        if webResult == "EMPTY":
+            with open("data/error1-2/wrongVersion.csv", 'a', newline='')as fw:
                 f_csv = csv.writer(fw)
                 # ls[0] = group1_list[i]
                 # print(ls[0])
                 f_csv.writerow(i)
         else:
-            DATE = obj.findall(getWebContent(group_url + i[1] + "/" + i[2]))[0]
-            result = getComDep(getWebContent(group_url + i[1] + "/" + i[2])) + getManDep(
-                getWebContent(group_url + i[1] + "/" + i[2])) + getRunDep(
-                getWebContent(group_url + i[1] + "/" + i[2])) + getTestDep(getWebContent(group_url + i[1] + "/" + i[2]))
+            DATE = obj.findall(webResult)[0]
+            result = getComDep(webResult) + getManDep(
+                webResult) + getRunDep(
+                webResult) + getTestDep(webResult)
+            # print("555555555 " + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
             # print(result)
             for j in result:
                 j = list(j)
@@ -164,7 +173,11 @@ def getDependencies(groupId, artifactId):
                 q = i + j
                 # print(q)
                 res.append(q)
-    with open("data/dependencies.csv", 'a', newline='')as f:
+    for t in range(0, 999):
+        file_name = "data/dependencies1-2/dependencies" + str(t) + ".csv"
+        if get_FileSize(file_name) < 10:
+            break
+    with open(file_name, 'a', newline='')as f:
         f_csv = csv.writer(f)
         # ls[0] = group1_list[i]
         # print(ls[0])
@@ -187,8 +200,8 @@ url = mvn_url + "/" + groupId + "/" + artifactId + "/" + version
 # print(getComDep2(getWebContent(url)))
 
 
-def write(file):
-    with open("data/result_out.csv")as f_o:
+def write(file, file_out):
+    with open(file_out)as f_o:
         n = csv.reader(f_o)
         num = len(list(n))
     with open(file)as f:
@@ -196,28 +209,37 @@ def write(file):
         for line, j in enumerate(g1_csv):
             if line < num:
                 continue
-            time.sleep(1.1)
+            # time.sleep(1.1)
             flag = 1
+            webResult = getWebContent("https://mvnrepository.com/artifact/" + strChange(j[0], '/', '.') + "/" + j[
+                1])
             while flag:
-                if getWebContent("https://mvnrepository.com/artifact/" + strChange(j[0], "/", ".") + "/" + j[1]) == "403 FORBIDDEN":
+                if webResult == "403 FORBIDDEN":
                     # print(j[0] + "/" + j[1] + "403")
-                    time.sleep(60)
+                    time.sleep(600)
+                    webResult = getWebContent(
+                        "https://mvnrepository.com/artifact/" + strChange(j[0], '/', '.') + "/" + j[
+                            1])
                 else:
-                    break
-            if getWebContent("https://mvnrepository.com/artifact/" + strChange(j[0], "/", ".") + "/" + j[1]) == "EMPTY":
+                    # time.sleep(1.1)
+                    flag = 0
+            if webResult == "EMPTY":
                 # print("error:", end='')
                 # print(j)
-                with open("data/wrongGA.csv", 'a', newline='')as f:
+                with open("data/error1-2/wrongGA.csv", 'a', newline='')as f:
                     f_csv = csv.writer(f)
                     # ls[0] = group1_list[i]
                     # print(ls[0])
                     f_csv.writerow(j)
             else:
-                getDependencies(strChange(j[0], "/", "."), j[1])
-            with open("data/result_out.csv", 'a', newline='') as f_out:
+                # time.sleep(1.1)
+                # print("2222222 " + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
+                getDependencies(strChange(j[0], '/', '.'), j[1])
+                # print("44444444 " + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
+            with open(file_out, 'a', newline='') as f_out:
                 out_csv = csv.writer(f_out)
                 out_csv.writerow(j)
 
 
-write("data/result.csv")
-# print(getVersionDetail(getWebContent("https://mvnrepository.com/artifact/activemq/activemq-container")))
+write("data/result/result_1_2.csv", "data/result/result_out_1_2.csv")
+# print(getDependencies("ch.epfl.lamp","scala-library"))

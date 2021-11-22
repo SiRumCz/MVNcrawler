@@ -4,7 +4,7 @@ import re
 import time
 
 from LibLink import removeVersion, divideGroupArtifact
-from getWeb import getWebContent
+from getWeb import getWebContent2
 from utils import duplicateDrop, delete_empty_rows, mergeCsv
 
 
@@ -115,7 +115,7 @@ def goodGetFirstHref(content):
         return "EMPTYDIR"
 
 
-# print(goodGetFirstHref(getWebContent("https://repo1.maven.org/maven2/HTTPClient/HTTPClient/")))
+# print(goodGetFirstHref(getWebContent2("https://repo1.maven.org/maven2/HTTPClient/HTTPClient/")))
 
 def badGetFirstHref(content):
     '''
@@ -179,7 +179,7 @@ def getNextHref(repo_url, gp, g_list):
     for i in gp:
         g1_url = repo_url + i[0]
         # print(g1_url)
-        group2_list = getFirstHref(getWebContent(g1_url))
+        group2_list = getFirstHref(getWebContent2(g1_url))
         # print(group2_list)
         if len(group2_list):
             for j in group2_list:
@@ -198,10 +198,10 @@ def writeNextHrefToCsvE(repo_url, gp, lst, lstFinal):
     g1_url = repo_url + gp[0]
     # print(g1_url)
 
-    if getFirstHref(getWebContent(g1_url)) == "EMPTY":
+    if getFirstHref(getWebContent2(g1_url)) == "EMPTY":
         return ""
     else:
-        group2_list = getFirstHref(getWebContent(g1_url))
+        group2_list = getFirstHref(getWebContent2(g1_url))
         # print(group2_list)
         # print(group2_list)
         if len(group2_list):
@@ -226,7 +226,7 @@ def badWriteNextHrefToCsvE(repo_url, gp, lst, lstFinal):
     # print(g1_url)
 
     ls = ['1']
-    if goodGetFirstHref(getWebContent(g1_url)) == "EMPTY":
+    if goodGetFirstHref(getWebContent2(g1_url)) == "EMPTY":
         try:
             with open('data/emptyURL.csv', 'a', newline='')as f:
                 f_csv = csv.writer(f)
@@ -236,7 +236,7 @@ def badWriteNextHrefToCsvE(repo_url, gp, lst, lstFinal):
                     f_csv.writerow(ls)
         except UnicodeEncodeError:
             pass
-    elif goodGetFirstHref(getWebContent(g1_url)) == "VERSIONLIB":
+    elif goodGetFirstHref(getWebContent2(g1_url)) == "VERSIONLIB":
         try:
             with open('data/versionlib.csv', 'a', newline='')as f:
                 f_csv = csv.writer(f)
@@ -246,7 +246,7 @@ def badWriteNextHrefToCsvE(repo_url, gp, lst, lstFinal):
                     f_csv.writerow(ls)
         except UnicodeEncodeError:
             pass
-    elif goodGetFirstHref(getWebContent(g1_url)) == "EMPTYDIR":
+    elif goodGetFirstHref(getWebContent2(g1_url)) == "EMPTYDIR":
         try:
             with open('data/emptylib.csv', 'a', newline='')as f:
                 f_csv = csv.writer(f)
@@ -257,7 +257,7 @@ def badWriteNextHrefToCsvE(repo_url, gp, lst, lstFinal):
         except UnicodeEncodeError:
             pass
     else:
-        group2_list = badGetFirstHref(getWebContent(g1_url))
+        group2_list = badGetFirstHref(getWebContent2(g1_url))
         # print(group2_list)
         # print(group2_list)
         if len(group2_list):
@@ -277,7 +277,7 @@ def goodWriteNextHrefToCsvE(repo_url, gp, lst, lstFinal):
     g1_url = repo_url + gp[0]
     # print(g1_url)
     ls = ['1']
-    if goodGetFirstHref(getWebContent(g1_url)) == "EMPTY":
+    if goodGetFirstHref(getWebContent2(g1_url)) == "EMPTY":
         try:
             with open('data/emptyURL.csv', 'a', newline='')as f:
                 f_csv = csv.writer(f)
@@ -287,7 +287,7 @@ def goodWriteNextHrefToCsvE(repo_url, gp, lst, lstFinal):
                     f_csv.writerow(ls)
         except UnicodeEncodeError:
             pass
-    elif goodGetFirstHref(getWebContent(g1_url)) == "VERSIONLIB":
+    elif goodGetFirstHref(getWebContent2(g1_url)) == "VERSIONLIB":
         try:
             with open('data/versionlib.csv', 'a', newline='')as f:
                 f_csv = csv.writer(f)
@@ -297,7 +297,7 @@ def goodWriteNextHrefToCsvE(repo_url, gp, lst, lstFinal):
                     f_csv.writerow(ls)
         except UnicodeEncodeError:
             pass
-    elif goodGetFirstHref(getWebContent(g1_url)) == "EMPTYDIR":
+    elif goodGetFirstHref(getWebContent2(g1_url)) == "EMPTYDIR":
         try:
             with open('data/emptylib.csv', 'a', newline='')as f:
                 f_csv = csv.writer(f)
@@ -308,7 +308,7 @@ def goodWriteNextHrefToCsvE(repo_url, gp, lst, lstFinal):
         except UnicodeEncodeError:
             pass
     else:
-        group2_list = goodGetFirstHref(getWebContent(g1_url))
+        group2_list = goodGetFirstHref(getWebContent2(g1_url))
         # print(group2_list)
         # print(group2_list)
         if len(group2_list):
@@ -324,15 +324,15 @@ def goodWriteNextHrefToCsvE(repo_url, gp, lst, lstFinal):
             # print(lstFinal)
 
 
-def reWriteNextHrefToCsvE(repo_url, gp, lst, lstFinal):
+def reWriteNextHrefToCsvE(repo_url, gp, lst, lstFinal,toPath):
     # begin = time.time()
     g1_url = repo_url + gp[0]
     # print(g1_url)
     ls = ['1']
-    # print(getFirstHref(getWebContent(g1_url)))
-    if getFirstHref(getWebContent(g1_url)) == "EMPTY":
+    # print(getFirstHref(getWebContent2(g1_url)))
+    if getFirstHref(getWebContent2(g1_url)) == "EMPTY":
         try:
-            with open('data/error/emptyURL.csv', 'a', newline='')as f:
+            with open(toPath+'emptyURL.csv', 'a', newline='')as f:
                 f_csv = csv.writer(f)
                 for i in range(len(gp)):
                     ls[0] = gp[i]
@@ -340,9 +340,9 @@ def reWriteNextHrefToCsvE(repo_url, gp, lst, lstFinal):
                     f_csv.writerow(ls)
         except UnicodeEncodeError:
             pass
-    elif getFirstHref(getWebContent(g1_url)) == "VERSIONLIB":
+    elif getFirstHref(getWebContent2(g1_url)) == "VERSIONLIB":
         try:
-            with open('data/error/versionlib.csv', 'a', newline='')as f:
+            with open(toPath+'versionlib.csv', 'a', newline='')as f:
                 f_csv = csv.writer(f)
                 for i in range(len(gp)):
                     ls[0] = gp[i]
@@ -350,9 +350,9 @@ def reWriteNextHrefToCsvE(repo_url, gp, lst, lstFinal):
                     f_csv.writerow(ls)
         except UnicodeEncodeError:
             pass
-    elif getFirstHref(getWebContent(g1_url)) == "EMPTYDIR":
+    elif getFirstHref(getWebContent2(g1_url)) == "EMPTYDIR":
         try:
-            with open('data/error/versionlib.csv', 'a', newline='')as f:
+            with open(toPath+'versionlib.csv', 'a', newline='')as f:
                 f_csv = csv.writer(f)
                 for i in range(len(gp)):
                     ls[0] = gp[i]
@@ -361,7 +361,7 @@ def reWriteNextHrefToCsvE(repo_url, gp, lst, lstFinal):
         except UnicodeEncodeError:
             pass
     else:
-        group2_list = getFirstHref(getWebContent(g1_url))
+        group2_list = getFirstHref(getWebContent2(g1_url))
         # print(group2_list)
         # print(group2_list)
         if len(group2_list):
@@ -377,15 +377,15 @@ def reWriteNextHrefToCsvE(repo_url, gp, lst, lstFinal):
             # print(lstFinal)
 
 
-def reWriteNextHrefToCsvE2(repo_url, gp, lst, lstFinal):
+def reWriteNextHrefToCsvE2(repo_url, gp, lst, lstFinal,toPath):
     # begin = time.time()
     g1_url = repo_url + gp[0]
     # print(g1_url)
     ls = ['1']
-    # print(getFirstHref(getWebContent(g1_url)))
-    if getFirstHref2(getWebContent(g1_url)) == "EMPTY":
+    # print(getFirstHref(getWebContent2(g1_url)))
+    if getFirstHref2(getWebContent2(g1_url)) == "EMPTY":
         try:
-            with open('data/error/emptyURL.csv', 'a', newline='')as f:
+            with open(toPath+'emptyURL.csv', 'a', newline='')as f:
                 f_csv = csv.writer(f)
                 for i in range(len(gp)):
                     ls[0] = gp[i]
@@ -393,9 +393,9 @@ def reWriteNextHrefToCsvE2(repo_url, gp, lst, lstFinal):
                     f_csv.writerow(ls)
         except UnicodeEncodeError:
             pass
-    elif getFirstHref2(getWebContent(g1_url)) == "VERSIONLIB":
+    elif getFirstHref2(getWebContent2(g1_url)) == "VERSIONLIB":
         try:
-            with open('data/error/versionlib.csv', 'a', newline='')as f:
+            with open(toPath+'versionlib.csv', 'a', newline='')as f:
                 f_csv = csv.writer(f)
                 for i in range(len(gp)):
                     ls[0] = gp[i]
@@ -403,9 +403,9 @@ def reWriteNextHrefToCsvE2(repo_url, gp, lst, lstFinal):
                     f_csv.writerow(ls)
         except UnicodeEncodeError:
             pass
-    elif getFirstHref2(getWebContent(g1_url)) == "EMPTYDIR":
+    elif getFirstHref2(getWebContent2(g1_url)) == "EMPTYDIR":
         try:
-            with open('data/error/versionlib.csv', 'a', newline='')as f:
+            with open(toPath+'versionlib.csv', 'a', newline='')as f:
                 f_csv = csv.writer(f)
                 for i in range(len(gp)):
                     ls[0] = gp[i]
@@ -414,7 +414,7 @@ def reWriteNextHrefToCsvE2(repo_url, gp, lst, lstFinal):
         except UnicodeEncodeError:
             pass
     else:
-        group2_list = getFirstHref2(getWebContent(g1_url))
+        group2_list = getFirstHref2(getWebContent2(g1_url))
         # print(group2_list)
         # print(group2_list)
         if len(group2_list):
@@ -430,15 +430,15 @@ def reWriteNextHrefToCsvE2(repo_url, gp, lst, lstFinal):
             # print(lstFinal)
 
 
-def checkWrong(file):
+def checkWrong(file, toPath):
     repo_url = "https://repo1.maven.org/maven2/"
     fileName = file
     lst = []
     lstFinal = []
     for i in range(0, 100):
         if i != 0:
-            fileName = "data/error/" + str(i) + ".csv"
-        file2 = "data/error/" + str(i + 1) + ".csv"
+            fileName = toPath + str(i) + ".csv"
+        file2 = toPath + str(i + 1) + ".csv"
         if os.stat(fileName).st_size == 0:
             os.remove(fileName)
             break
@@ -449,7 +449,7 @@ def checkWrong(file):
                 g1_csv = csv.reader(f)
                 if i > 2:
                     for j in g1_csv:
-                        reWriteNextHrefToCsvE(repo_url, j, lst, lstFinal)
+                        reWriteNextHrefToCsvE(repo_url, j, lst, lstFinal,toPath)
                         if len(lst) >= 100:
                             print("lst=", end='')
                             print(lst)
@@ -473,7 +473,7 @@ def checkWrong(file):
                             pass
                 else:
                     for j in g1_csv:
-                        reWriteNextHrefToCsvE2(repo_url, j, lst, lstFinal)
+                        reWriteNextHrefToCsvE2(repo_url, j, lst, lstFinal,toPath)
                         if len(lst) >= 100:
                             print("lst=", end='')
                             print(lst)
@@ -514,17 +514,21 @@ def checkWrong(file):
                 lst[lst.index(k)] = ''
 
 
-# mergeCsv("data/wrongGA.csv", "data/error/wrongGA.csv")
-# checkWrong("data/error/wrongGA.csv")
-# removeVersion("data/error/versionlib.csv", "data/error/versionlib2.csv")
-# divideGroupArtifact("data/error/versionlib2.csv", "data/result.csv")
+# mergeCsv("data/error1-2/wrongGA.csv", "data/error1-2/wrongGA1-2.csv")
+# print("finish merge")
+# checkWrong("data/error1-2/wrongGA1-2.csv", "data/error1-2/")
+# print("finish checkwrong")
+# removeVersion("data/error1-2/versionlib.csv", "data/error1-2/versionlib2.csv")
+# print("finish removeVersion")
+# divideGroupArtifact("data/error1-2/versionlib2.csv", "data/result/result_1_2.csv")
+# print("finish divideGroupArtifact")
 
 
 # goodWriteNextHrefToCsvE("https://repo1.maven.org/maven2/", gp=["org.elasticsearch/elasticsearch/5.0.0-beta1/"], lst=[], lstFinal=[])
-# print(goodGetFirstHref(getWebContent("https://repo1.maven.org/maven2/org.elasticsearch/elasticsearch/5.0.0-beta1/")))
-# print(goodGetFirstHref(getWebContent("https://repo1.maven.org/maven2/org.elasticsearch/elasticsearch/")))
-# print(goodGetFirstHref(getWebContent("https://repo1.maven.org/maven2/co/touchlab/android-arch-driver/")))
-# print(goodGetFirstHref(getWebContent("https://repo1.maven.org/maven2/co/touchlab/")))
+# print(goodGetFirstHref(getWebContent2("https://repo1.maven.org/maven2/org.elasticsearch/elasticsearch/5.0.0-beta1/")))
+# print(goodGetFirstHref(getWebContent2("https://repo1.maven.org/maven2/org.elasticsearch/elasticsearch/")))
+# print(goodGetFirstHref(getWebContent2("https://repo1.maven.org/maven2/co/touchlab/android-arch-driver/")))
+# print(goodGetFirstHref(getWebContent2("https://repo1.maven.org/maven2/co/touchlab/")))
 
 def recheckEmpty(repo_url, file):
     # begin = time.time()
@@ -534,7 +538,7 @@ def recheckEmpty(repo_url, file):
             g1_url = repo_url + j[0]
             # print(g1_url)
             ls = ['1']
-            if goodGetFirstHref(getWebContent(g1_url)) == "EMPTY":
+            if goodGetFirstHref(getWebContent2(g1_url)) == "EMPTY":
                 try:
                     with open('data/emptyURL.csv', 'a', newline='')as f:
                         f_csv = csv.writer(f)
@@ -544,7 +548,7 @@ def recheckEmpty(repo_url, file):
                             f_csv.writerow(ls)
                 except UnicodeEncodeError:
                     pass
-            elif goodGetFirstHref(getWebContent(g1_url)) == "EMPTYDIR":
+            elif goodGetFirstHref(getWebContent2(g1_url)) == "EMPTYDIR":
                 try:
                     with open('data/emptyLib.csv', 'a', newline='')as f:
                         f_csv = csv.writer(f)
@@ -554,7 +558,7 @@ def recheckEmpty(repo_url, file):
                             f_csv.writerow(ls)
                 except UnicodeEncodeError:
                     pass
-            elif goodGetFirstHref(getWebContent(g1_url)) == "VERSIONLIB":
+            elif goodGetFirstHref(getWebContent2(g1_url)) == "VERSIONLIB":
                 try:
                     with open('data/versionlib.csv', 'a', newline='')as f:
                         f_csv = csv.writer(f)
@@ -754,7 +758,7 @@ def recheckEmpty(repo_url, file):
 #             print(k)
 
 # repo_url = "https://repo1.maven.org/maven2/"
-# group1_list = badGetFirstHref(getWebContent(repo_url))
+# group1_list = badGetFirstHref(getWebContent2(repo_url))
 # print(group1_list)
 # ls=["ai/hyacinth/framework/core-service-admin-server/"]
 #
@@ -766,14 +770,14 @@ def recheckEmpty(repo_url, file):
 # writeNextHrefToCsvE(repo_url, gp, lst, lstFinal)
 # print(lst)
 # print(lstFinal)
-# print(agetFirstHref(getWebContent("https://repo1.maven.org/maven2/com/cedarsoft/thirdparty/")))
-# print(getFirstHref(getWebContent("https://repo1.maven.org/maven2/codehaus/")))
+# print(agetFirstHref(getWebContent2("https://repo1.maven.org/maven2/com/cedarsoft/thirdparty/")))
+# print(getFirstHref(getWebContent2("https://repo1.maven.org/maven2/codehaus/")))
 # begin=time.time()
-# print(agetFirstHref(getWebContent("https://repo1.maven.org/maven2/co/touchlab/stately-iso-collections-linuxarm32hfp/0.10.0/")))
+# print(agetFirstHref(getWebContent2("https://repo1.maven.org/maven2/co/touchlab/stately-iso-collections-linuxarm32hfp/0.10.0/")))
 # end = time.time()
 # print('time is %d m seconds ' % (int(round((end-begin) * 1000))))
-# print(getWebContent("https://repo1.maven.org/maven2/codehaus/"))
+# print(getWebContent2("https://repo1.maven.org/maven2/codehaus/"))
 
-# asdf(getWebContent("https://blog.csdn.net/weixin_45086637/article/details/92799127"))
+# asdf(getWebContent2("https://blog.csdn.net/weixin_45086637/article/details/92799127"))
 
 # writeNextHrefToCsvE(repo_url,ls,[],[])

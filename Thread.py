@@ -5,7 +5,7 @@ import threading
 import time
 
 from getWeb import getWebContent
-from getHref import getFirstHref, getNextHref, writeNextHrefToCsv, writeNextHrefToCsvE, recheckEmpty
+from getHref import getFirstHref, getNextHref,  writeNextHrefToCsvE, recheckEmpty
 from LibLink import getLibLink, divideGroupArtifact
 
 repo_url = "https://repo1.maven.org/maven2/"
