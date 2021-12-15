@@ -449,7 +449,7 @@ def checkWrong(file, toPath):
                 g1_csv = csv.reader(f)
                 if i > 2:
                     for j in g1_csv:
-                        reWriteNextHrefToCsvE(repo_url, j, lst, lstFinal,toPath)
+                        reWriteNextHrefToCsvE2(repo_url, j, lst, lstFinal,toPath)
                         if len(lst) >= 100:
                             print("lst=", end='')
                             print(lst)
@@ -514,13 +514,13 @@ def checkWrong(file, toPath):
                 lst[lst.index(k)] = ''
 
 
-# mergeCsv("data/error1-2/wrongGA.csv", "data/error1-2/wrongGA1-2.csv")
+# mergeCsv("data/error/wrongGA.csv", "data/error/wrongGA1.csv")
 # print("finish merge")
-# checkWrong("data/error1-2/wrongGA1-2.csv", "data/error1-2/")
+# checkWrong("data/error/wrongGA1.csv", "data/error/")
 # print("finish checkwrong")
-# removeVersion("data/error1-2/versionlib.csv", "data/error1-2/versionlib2.csv")
+# removeVersion("data/error/versionlib.csv", "data/error/versionlib2.csv")
 # print("finish removeVersion")
-# divideGroupArtifact("data/error1-2/versionlib2.csv", "data/result/result_1_2.csv")
+# divideGroupArtifact("data/error/versionlib2.csv", "data/result/r.csv")
 # print("finish divideGroupArtifact")
 
 

@@ -1,5 +1,6 @@
 import csv
 import datetime
+import os
 import re
 import time
 
@@ -44,7 +45,7 @@ def getVersionDetail(groupId, artifactId):
     content = obj.findall(content)[0]
     # print(content)
     obj = re.compile(
-        r'<tr><td.*?>.*?href=\"(?P<artifact>.*?)/(?P<version>.*?)\" class=\"vbtn.*?\">.*?</a>.*?<td.*?>.*?(?P<usages>[0-9]+?)[<\n].*?</span></td><td>(?P<date>.*?)</td>',
+        r'<tr><td.*?>.*?href=\"(?P<artifact>.*?)/(?P<version>.*?)\" class=\"vbtn.*?\">.*?</a>.*?<td.*?>.*?(?P<usages>[0-9,]+?)[<\n].*?</span></td><td>(?P<date>.*?)</td>',
         re.S)
     result = obj.findall(content)
     # print(result)
@@ -154,7 +155,7 @@ def getDependencies(groupId, artifactId):
             else:
                 flag = 0
         if webResult == "EMPTY":
-            with open("data/error1-2/wrongVersion.csv", 'a', newline='')as fw:
+            with open("data1/wrongVersion.csv", 'a', newline='')as fw:
                 f_csv = csv.writer(fw)
                 # ls[0] = group1_list[i]
                 # print(ls[0])
@@ -174,7 +175,7 @@ def getDependencies(groupId, artifactId):
                 # print(q)
                 res.append(q)
     for t in range(0, 999):
-        file_name = "data/dependencies1-2/dependencies" + str(t) + ".csv"
+        file_name = "data1/dependencies" + str(t) + ".csv"
         if get_FileSize(file_name) < 10:
             break
     with open(file_name, 'a', newline='')as f:
@@ -226,7 +227,7 @@ def write(file, file_out):
             if webResult == "EMPTY":
                 # print("error:", end='')
                 # print(j)
-                with open("data/error1-2/wrongGA.csv", 'a', newline='')as f:
+                with open("data1/wrongGA.csv", 'a', newline='')as f:
                     f_csv = csv.writer(f)
                     # ls[0] = group1_list[i]
                     # print(ls[0])
@@ -241,5 +242,10 @@ def write(file, file_out):
                 out_csv.writerow(j)
 
 
-write("data/result/result_1_2.csv", "data/result/result_out_1_2.csv")
+# os.system('shutdown /s ')
+# write("data/result/r.csv", "data/result/r_out.csv")
+# write("data1/result.csv", "data1/result_out.csv")
 # print(getDependencies("ch.epfl.lamp","scala-library"))
+# with open("MDG_data/MDG_data.csv") as f:
+#     data = csv.reader(f)
+#     num = len(list(data))

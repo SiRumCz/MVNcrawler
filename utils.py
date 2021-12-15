@@ -204,10 +204,18 @@ def get_FileSize(filePath):
 # print(len(pd.read_csv("data/5.csv").index))
 # print(pd.read_csv("data/5.csv"))
 
-# csv_list = glob.glob("data/*.csv")  # 查看同文件夹下的csv文件数
+# csv_list = glob.glob("MDG_data/*.csv")  # 查看同文件夹下的csv文件数
 # print(u'共发现%s个CSV文件' % len(csv_list))
 # print(u'正在处理............')
 # for i in csv_list:  # 循环读取同文件夹下的csv文件
 #     fr = open(i, 'rb').read()
-#     with open("data/result1.csv", 'ab') as f:  # 将结果保存为result.csv
+#     with open("MDG_data/MDG_data.csv", 'ab') as f:  # 将结果保存为result.csv
 #         f.write(fr)
+
+
+# delete_empty_rows("MDG_data/result3.csv")
+# duplicateDrop("MDG_data/result3.csv")
+# delete_empty_rows("MDG_data/result3-2-4.csv")
+# duplicateDrop("MDG_data/result3-2-4.csv")
+# delete_empty_rows("MDG_data/result4.csv")
+# duplicateDrop("MDG_data/result4.csv")

@@ -1,3 +1,4 @@
+import os
 import time
 import urllib
 import undetected_chromedriver.v2 as uc
@@ -23,6 +24,7 @@ def getCookies():
     except:
         return getCookies()
 
+
 # getCookies()
 def getWebContent(url):
     """
@@ -37,7 +39,7 @@ def getWebContent(url):
         'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36",
         "cookie": "cf_clearance=" + cookie
     }
-    time.sleep(0.2)
+    time.sleep(0.3)
     req = urllib.request.Request(url=url, headers=headers)  # 这里要注意，必须使用url=url，headers=headers的格式，否则回报错，无法连接字符
     try:
         response = urllib.request.urlopen(req)  # 注意，这里要用req，不然就被添加useragent
@@ -51,17 +53,18 @@ def getWebContent(url):
         print(url + "   is a wrong url")
         code = err.code
         print(code)
-        if code == 403 :
+        if code == 403:
             return "403 FORBIDDEN"
         elif code == 503:
             getCookies()
             return getWebContent(url)
-        elif code==404:
+        elif code == 404 or 400:
             return "EMPTY"
         else:
             return getWebContent(url)
     except:
         return getWebContent(url)
+
 
 # getWebContent("https://mvnrepository.com/")
 def getWebContent2(url):
@@ -70,19 +73,20 @@ def getWebContent2(url):
     :param url:
     :return:content type: string
     """
-    with open("cookie.txt", "r") as f:
-        cookie = f.readline()
+    # with open("cookie.txt", "r") as f:
+    #     cookie = f.readline()
     headers = {
-        # 'User-Agent': get_random_agent(),
-        'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36",
-        "cookie": "cf_clearance=" + cookie
+        'User-Agent': get_random_agent(),
+        # 'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36",
+        # "cookie": "cf_clearance=" + cookie
     }
     # time.sleep(0.1)
     req = urllib.request.Request(url=url, headers=headers)  # 这里要注意，必须使用url=url，headers=headers的格式，否则回报错，无法连接字符
     try:
         response = urllib.request.urlopen(req)  # 注意，这里要用req，不然就被添加useragent
-
+        # print("1")
         content = response.read().decode("UTF-8")
+        # print(content)
 
         response.close()
 
@@ -91,17 +95,17 @@ def getWebContent2(url):
         print(url + "   is a wrong url")
         code = err.code
         print(code)
-        if code == 403 :
+        if code == 403:
             return "403 FORBIDDEN"
         elif code == 503:
-            getCookies()
-            return getWebContent(url)
-        elif code== 404:
+            # getCookies()
+            return getWebContent2(url)
+        elif code == 404:
             return "EMPTY"
         else:
-            return getWebContent(url)
+            return getWebContent2(url)
     except:
-        return getWebContent(url)
+        return getWebContent2(url)
 # print(getWebContent("https://mvnrepository.com/artifact/be.yildiz-games/common-client/"))
 # print(getWebContent("https://mvnrepository.com"))
 
